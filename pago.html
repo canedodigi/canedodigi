@@ -3,97 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagar con Nequi</title>
+    <title>Pagar con Nequi | Canedo Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --nequi-primary: #210049;
+            --nequi-secondary: #FF2F73;
+            --nequi-accent: #AC35C4;
+            --nequi-light: #F5F0FF;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #1a001f;
+            background: linear-gradient(135deg, var(--nequi-primary) 0%, #160030 100%);
             color: white;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
         }
-
-        .qr-container {
-            background-color: #2a0030;
-            border-radius: 12px;
-            padding: 20px;
-            display: inline-block;
+        
+        .logo {
+            margin: 20px 0;
+            width: 180px;
+            max-width: 100%;
         }
-
-        .qr-image {
-            width: 300px;
-            max-width: 90%;
-            border-radius: 10px;
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
         }
-
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
         h1 {
-            color: #ff33cc;
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
         }
-
-        .description {
-            margin-top: 20px;
+        
+        .payment-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .qr-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .qr-nequi-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--nequi-secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow);
+        }
+        
+        .qr-image {
+            width: 220px;
+            height: 220px;
+            display: block;
+        }
+        
+        .payment-details {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .payment-details h2 {
             font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--nequi-light);
         }
-
-        .redirect-msg {
-            margin-top: 30px;
-            font-size: 16px;
-            color: #cccccc;
+        
+        .detail-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-
-        .main-button, .whatsapp-button, .back-button {
-            margin-top: 15px;
-            padding: 12px 20px;
+        
+        .detail-item i {
+            color: var(--nequi-secondary);
+            margin-right: 10px;
+        }
+        
+        .detail-item .label {
+            font-weight: 600;
+            color: var(--nequi-light);
+        }
+        
+        .detail-item .value {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--nequi-accent);
+            margin-left: 8px;
+            cursor: pointer;
             font-size: 16px;
-            background-color: #ff33cc;
+            transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+            color: var(--nequi-secondary);
+            transform: scale(1.1);
+        }
+        
+        .instructions {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .instructions h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--nequi-light);
+            text-align: center;
+        }
+        
+        .instruction-step {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: var(--nequi-secondary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--nequi-light);
+        }
+        
+        #countdown {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--nequi-secondary);
+        }
+        
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background-color: var(--nequi-secondary);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
             text-decoration: none;
-            display: inline-block;
+            margin: 10px 5px;
+            box-shadow: var(--shadow);
         }
-
-        .whatsapp-button {
-            background-color: #25d366;
-            margin-left: 10px;
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
         }
-
-        .back-button {
-            background-color: #6666ff;
-            margin-left: 10px;
+        
+        .button i {
+            margin-right: 10px;
+        }
+        
+        .button.whatsapp {
+            background-color: #25D366;
+        }
+        
+        .button.home {
+            background-color: var(--nequi-accent);
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        footer {
+            margin-top: auto;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .copied-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--nequi-accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+            }
         }
     </style>
-    <script>
-        // Redirige automáticamente a la página principal después de 45 segundos
-        setTimeout(function() {
-            window.location.href = "index.html"; // Cambia esto si tu página principal tiene otra ruta
-        }, 15000);
-    </script>
 </head>
 <body>
-    <h1>Pagar con Nequi</h1>
-    <div class="qr-container">
-        <img src="codigo.png" alt="QR Nequi" class="qr-image">
-        <div class="description">
-            <p>Escanea este código QR con Nequi o cualquier entidad habilitada,
-                manda captura abajo esta el WhatsApp.</p>
-            <p><strong>Nombre:</strong> Canedo Digital</p>
-            <p><strong>Código:</strong> 989218125</p>
+    <div class="container">
+        <h1>Pago Seguro con Nequi</h1>
+        
+        <div class="card payment-info">
+            <div class="qr-container">
+                <div class="qr-nequi-badge">Nequi</div>
+                <img src="/api/placeholder/240/240" alt="Código QR Nequi" class="qr-image">
+            </div>
+            
+            <div class="payment-details">
+                <h2>Datos de Pago</h2>
+                
+                <div class="detail-item">
+                    <div>
+                        <i class="fas fa-user"></i>
+                        <span class="label">Nombre:</span>
+                    </div>
+                    <div class="value">
+                        Canedo Digital
+                        <button class="copy-btn" onclick="copyToClipboard('Canedo Digital')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="detail-item">
+                    <div>
+                        <i class="fas fa-hashtag"></i>
+                        <span class="label">Código:</span>
+                    </div>
+                    <div class="value">
+                        989218125
+                        <button class="copy-btn" onclick="copyToClipboard('989218125')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card instructions">
+            <h2>¿Cómo realizar el pago?</h2>
+            
+            <div class="instruction-step">
+                <div class="step-number">1</div>
+                <div>Abre la app de Nequi en tu teléfono móvil</div>
+            </div>
+            
+            <div class="instruction-step">
+                <div class="step-number">2</div>
+                <div>Selecciona la opción "Pagar" y luego "Escanear código QR"</div>
+            </div>
+            
+            <div class="instruction-step">
+                <div class="step-number">3</div>
+                <div>Escanea el código QR mostrado arriba o utiliza el código manual</div>
+            </div>
+            
+            <div class="instruction-step">
+                <div class="step-number">4</div>
+                <div>Confirma el pago y guarda tu comprobante</div>
+            </div>
+            
+            <div class="instruction-step">
+                <div class="step-number">5</div>
+                <div>Envía el comprobante por WhatsApp usando el botón a continuación</div>
+            </div>
+        </div>
+        
+        <div class="timer-container">
+            <p>Serás redirigido a la página principal en <span id="countdown">15</span> segundos</p>
+        </div>
+        
+        <div class="buttons-container">
+            <a href="https://wa.me/573205296175?text=Hola%2C+te+env%C3%ADo+el+comprobante+de+mi+compra+%F0%9F%93%9D" target="_blank" class="button whatsapp">
+                <i class="fab fa-whatsapp"></i> Enviar Comprobante
+            </a>
+            
+            <a href="index.html" class="button home">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </a>
         </div>
     </div>
-
-    <div class="redirect-msg">
-        <p>Una vez realizado el pago, serás redirigido automáticamente a la página principal.</p>
-        <p>O haz clic aquí si no quieres esperar:</p>
-        <a href="index.html" class="main-button">Volver a Inicio</a>
-    </div>
-
-    <div style="margin-top: 30px;">
-        <a href="https://wa.me/573205296175?text=Hola%2C+te+env%C3%ADo+el+comprobante+de+mi+compra+%F0%9F%93%9D" target="_blank" class="whatsapp-button">
-            Enviar Comprobante por WhatsApp
-        </a>
-        <a href="index.html" class="back-button">Regresar</a>
-    </div>
+    
+    <footer>
+        &copy; 2025 Canedo Digital - Todos los derechos reservados
+    </footer>
+    
+    <div class="copied-notification" id="notification">¡Copiado al portapapeles!</div>
+    
+    <script>
+        // Función para copiar texto al portapapeles
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const notification = document.getElementById('notification');
+                    notification.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Error al copiar texto: ', err);
+                });
+        }
+        
+        // Cuenta regresiva de redirección
+        let timeLeft = 30;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = "index.html";
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
